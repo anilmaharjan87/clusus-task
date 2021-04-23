@@ -3,8 +3,8 @@ package com.clusus.service;
 import com.clusus.dto.DealDto;
 import com.clusus.entity.Deal;
 import com.clusus.exceptions.DealAlreadyExistException;
+import com.clusus.mapper.DealMapper;
 import com.clusus.repository.DealRepository;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,8 @@ public class DealServiceImpl implements DealService {
             throw new DealAlreadyExistException("Deal with deal id " + deal.getDealId() + " already exist");
         }
         Deal savedDeal = dealRepository.save(deal);
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(savedDeal, DealDto.class);
+        DealDto dealDto = DealMapper.INSTANCE.toDto(savedDeal);
+        return dealDto;
     }
 
     @Override

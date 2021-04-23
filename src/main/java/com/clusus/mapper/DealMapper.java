@@ -12,4 +12,7 @@ public interface DealMapper {
 
     @Mapping(source = "dealDto.dealTime", target = "dealTime", dateFormat = "yyyy-MM-dd hh:mm:ss")
     Deal toEntity(DealDto dealDto);
+
+    @Mapping(source = "deal.dealTime", target = "dealTime", dateFormat = "yyyy-MM-dd hh:mm:ss")
+    DealDto toDto(Deal deal);
 }

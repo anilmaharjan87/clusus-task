@@ -15,7 +15,7 @@ public class DateValidator {
         try {
             dateFormat.parse(date);
         } catch (ParseException e) {
-            logger.error("Cannot parse the date");
+            logger.error("Cannot parse the date",e);
             return false;
         }
         return true;

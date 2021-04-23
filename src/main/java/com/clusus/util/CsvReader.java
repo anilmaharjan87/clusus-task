@@ -12,11 +12,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -56,7 +52,6 @@ public class CsvReader {
                 Boolean isValid = DataValidator.isDataValid(dealDto);
                 if (isValid) {
                     Deal deal = DealMapper.INSTANCE.toEntity(dealDto);
-//                    Deal deal = populateDealEntity(dealDto);
                     dealList.add(deal);
                 }
             }
@@ -66,25 +61,5 @@ public class CsvReader {
             logger.error("IOException occurred", ex);
         }
         dealService.saveDealList(dealList);
-    }
-
-    private Deal populateDealEntity(DealDto dealDto) {
-        Deal deal = new Deal();
-        deal.setDealId(dealDto.getDealId());
-        deal.setFromCurrencyCode(dealDto.getFromCurrencyCode());
-        deal.setToCurrencyCode(dealDto.getToCurrencyCode());
-        deal.setDealTime(convertDate(dealDto.getDealTime()));
-        deal.setDealAmount(new BigDecimal(dealDto.getDealAmount()));
-        return deal;
-    }
-
-    private Date convertDate(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            return dateFormat.parse(date);
-        } catch (ParseException e) {
-            logger.error("Error converting date", e);
-        }
-        return null;
     }
 }

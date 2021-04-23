@@ -10,15 +10,9 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
-public class DataWarehouseApplication implements CommandLineRunner {
-    @Autowired
-    private CsvReader csvReader;
+public class DataWarehouseApplication {
     public static void main(String[] args) {
         SpringApplication.run(DataWarehouseApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        csvReader.processCsvFile();
-    }
 }
