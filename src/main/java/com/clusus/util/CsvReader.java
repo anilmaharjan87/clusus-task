@@ -1,9 +1,11 @@
 package com.clusus.util;
 
+import com.clusus.dto.DealDto;
 import com.clusus.entity.Deal;
-import com.clusus.enums.CurrencyCode;
+import com.clusus.mapper.DealMapper;
 import com.clusus.service.DealService;
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -16,13 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class CsvReader {
     private final DealService dealService;
-    private static final Logger logger = Logger.getLogger(CsvReader.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(CsvReader.class);
     private static final String COMMA_SEPARATOR = ",";
     private static final Integer TOTAL_COLUMN = 5;
 
@@ -41,40 +41,49 @@ public class CsvReader {
                     skip = false;
                     continue;
                 }
-                Deal deal = new Deal();
+                DealDto dealDto = new DealDto();
                 String[] data = line.split(COMMA_SEPARATOR);
 /*                if (data.length < TOTAL_COLUMN) {
 //                    throw new ArrayIndexOutOfBoundsException("Array is out of bound");
                     logger.log(Level.WARNING, "Incomplete data of deal");
                     continue;
                 }*/
-                deal.setDealId(data[0]);
-                deal.setFromCurrencyCode(data[1]);
-                deal.setToCurrencyCode(data[2]);
-                if (StringUtils.isNotBlank(data[3]) && DateValidator.isValid(data[3])) {
-                    deal.setDealTime(getTimestamp(data[3]));
+                dealDto.setDealId(data[0]);
+                dealDto.setFromCurrencyCode(data[1]);
+                dealDto.setToCurrencyCode(data[2]);
+                dealDto.setDealTime((data[3]));
+                dealDto.setDealAmount((data[4]));
+                Boolean isValid = DataValidator.isDataValid(dealDto);
+                if (isValid) {
+                    Deal deal = DealMapper.INSTANCE.toEntity(dealDto);
+//                    Deal deal = populateDealEntity(dealDto);
+                    dealList.add(deal);
                 }
-                if (StringUtils.isNotBlank(data[4])) {
-                    deal.setDealAmount(new BigDecimal(data[4]));
-                }
-
-                dealList.add(deal);
             }
         } catch (FileNotFoundException ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.error("File not found", ex);
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.error("IOException occurred", ex);
         }
         dealService.saveDealList(dealList);
-        System.out.println(dealList);
     }
 
-    private Date getTimestamp(String date) {
+    private Deal populateDealEntity(DealDto dealDto) {
+        Deal deal = new Deal();
+        deal.setDealId(dealDto.getDealId());
+        deal.setFromCurrencyCode(dealDto.getFromCurrencyCode());
+        deal.setToCurrencyCode(dealDto.getToCurrencyCode());
+        deal.setDealTime(convertDate(dealDto.getDealTime()));
+        deal.setDealAmount(new BigDecimal(dealDto.getDealAmount()));
+        return deal;
+    }
+
+    private Date convertDate(String date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             return dateFormat.parse(date);
         } catch (ParseException e) {
-            logger.log(Level.SEVERE, "Error converting the date", e);
+            logger.error("Error converting date", e);
         }
         return null;
     }

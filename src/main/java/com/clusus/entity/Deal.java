@@ -10,9 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table
 public class Deal {
@@ -31,4 +28,55 @@ public class Deal {
     private Date dealTime;
     @NotNull
     private BigDecimal dealAmount;
+
+    public Deal() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDealId() {
+        return dealId;
+    }
+
+    public void setDealId(String dealId) {
+        this.dealId = dealId;
+    }
+
+    public String getFromCurrencyCode() {
+        return fromCurrencyCode;
+    }
+
+    public void setFromCurrencyCode(String fromCurrencyCode) {
+        this.fromCurrencyCode = fromCurrencyCode;
+    }
+
+    public String getToCurrencyCode() {
+        return toCurrencyCode;
+    }
+
+    public void setToCurrencyCode(String toCurrencyCode) {
+        this.toCurrencyCode = toCurrencyCode;
+    }
+
+    public Date getDealTime() {
+        return dealTime;
+    }
+
+    public void setDealTime(Date dealTime) {
+        this.dealTime = dealTime;
+    }
+
+    public BigDecimal getDealAmount() {
+        return dealAmount;
+    }
+
+    public void setDealAmount(BigDecimal dealAmount) {
+        this.dealAmount = dealAmount;
+    }
 }
