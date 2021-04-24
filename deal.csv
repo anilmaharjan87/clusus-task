@@ -1,5 +1,5 @@
 deal_id,from_currency,to_currency,deal_timestamp,amount
-SN01,NPR,INR, ,1934
-SN02,USD,NPR,2021-04-24 10:25:15,1293
+SN01,,INR, 1222,dfasdfa
+SN02,USD,asdfa,2021-04-24 10:25:15,1293
 SN03,AUD,NPR,2021-04-25 10:30:15,asdfadsf
-SN04,NPR,NPR,2021-04-26 10:11:15,0.002
+SN04,,NPR,2021-04-26 10:11:15,0.002

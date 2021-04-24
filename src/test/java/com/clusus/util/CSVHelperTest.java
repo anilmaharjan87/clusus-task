@@ -10,9 +10,11 @@ import static org.junit.Assert.assertTrue;
 
 public class CSVHelperTest {
     @Test
-    void testFileFormat() throws IOException {
+    void testFileFormatForCSV() throws IOException {
         FileInputStream fis = new FileInputStream("deal.csv");
-        MockMultipartFile multipartFile = new MockMultipartFile("deal", fis);
+        MockMultipartFile multipartFile = new MockMultipartFile("deal","deal","text/csv",fis);
+        String contentType = multipartFile.getContentType();
         assertTrue(CSVHelper.hasCSVFormat(multipartFile));
     }
+
 }
