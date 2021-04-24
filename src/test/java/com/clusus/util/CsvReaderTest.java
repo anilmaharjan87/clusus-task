@@ -1,4 +1,4 @@
-package com.clusus;
+package com.clusus.util;
 
 import com.clusus.dto.DealDto;
 import com.clusus.dto.ErrorResponse;
@@ -16,13 +16,8 @@ import org.mockito.internal.matchers.InstanceOf;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 
 public class CsvReaderTest {

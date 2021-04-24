@@ -5,6 +5,7 @@ import com.clusus.dto.ErrorResponse;
 import com.clusus.entity.Deal;
 import com.clusus.enums.CurrencyCode;
 import com.clusus.repository.DealRepository;
+import com.clusus.service.DealService;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ValidationUtility {
+public class DealValidator {
     @Autowired
     private DealRepository dealRepository;
 
