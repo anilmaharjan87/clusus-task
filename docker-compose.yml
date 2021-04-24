@@ -18,5 +18,7 @@ services:
       - mysql-docker-container
     ports:
       - 8087:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-docker-container:3306/deal?createDatabaseIfNotExist=true
     volumes:
       - /data/spring-boot-app

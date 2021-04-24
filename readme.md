@@ -1,8 +1,8 @@
 # Clustered data warehouse
 
-***
+
 Clustered data warehouse application reads csv file that the user have to upload through the exposed endpoint. The
-endpoint to upload csv file is [upload csv](http://localhost:9090/api/v1/deal/upload). After upload is successful it
+endpoint to upload csv file is [upload csv](http://localhost:8080/api/v1/deal/upload). After upload is successful it
 validates the file format to verify whether the file is csv or not.<br/>
 **csv file must have header present in it since application contains logic to remove the header of csv file.**
 Application will save records containing valid data in database and returns map of  record that does not have valid data
@@ -26,6 +26,6 @@ with corresponding row number.
 2. Docker file
 
 ###How to run this?
-$ git cl
+$ git clone https://github.com/anilmaharjan87/clusus-task.git
 
 
