@@ -2,10 +2,8 @@ package com.clusus.util;
 
 import com.clusus.dto.DealDto;
 import com.clusus.dto.ErrorResponse;
-import com.clusus.entity.Deal;
 import com.clusus.enums.CurrencyCode;
 import com.clusus.repository.DealRepository;
-import com.clusus.service.DealService;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +20,19 @@ public class DealValidator {
     @Autowired
     private DealRepository dealRepository;
 
-    public  Map<Integer, Object> validateDeals(List<DealDto> dealDtos) {
+    public Map<Integer, Object> validateDeals(List<DealDto> dealDtos) {
         Map<Integer, Object> errorMap = new HashMap();
         for (int row = 0; row < dealDtos.size(); row++) {
             List<ErrorResponse> errorResponses = new ArrayList<>();
             DealDto dealDto = dealDtos.get(row);
-            if (dealRepository.findByDealId(dealDto.getDealId()) != null) {
-                ErrorResponse errorResponse = populateError("Deal with deal id " + dealDto.getDealId() + " already exists", row, "dealId");
+            if (StringUtils.isBlank(dealDto.getDealId())) {
+                ErrorResponse errorResponse = populateError("Deal with invalid deal id", row, "dealId");
                 errorResponses.add(errorResponse);
+            } else {
+                if (dealRepository.findByDealId(dealDto.getDealId()) != null) {
+                    ErrorResponse errorResponse = populateError("Deal with given deal id  already exists", row, "dealId");
+                    errorResponses.add(errorResponse);
+                }
             }
             if (!EnumUtils.isValidEnum(CurrencyCode.class, dealDto.getFromCurrencyCode())) {
                 ErrorResponse errorResponse = populateError("Deal with invalid from ISO currency code", row, "fromCurrencyCode");
@@ -43,12 +46,12 @@ public class DealValidator {
                 ErrorResponse errorResponse = populateError("Deal with invalid date format", row, "dealTime");
                 errorResponses.add(errorResponse);
             }
-            if (StringUtils.isBlank(dealDto.getDealAmount()) || !DataValidator.checkIfAmountIsNumber(dealDto.getDealAmount())) {
+            if (StringUtils.isBlank(dealDto.getDealAmount()) || !AmountValidator.checkIfAmountIsNumber(dealDto.getDealAmount())) {
                 ErrorResponse errorResponse = populateError("Deal with invalid amount", row, "dealAmount");
                 errorResponses.add(errorResponse);
             } else {
                 if (new BigDecimal(dealDto.getDealAmount()).compareTo(BigDecimal.ZERO) <= 0) {
-                    ErrorResponse errorResponse = populateError("Deal with  amount less than zero", row, "dealAmount");
+                    ErrorResponse errorResponse = populateError("Deal with  amount less than or zero", row, "dealAmount");
                     errorResponses.add(errorResponse);
                 }
             }

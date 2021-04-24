@@ -9,5 +9,5 @@ import java.util.List;
 public interface DealService {
     DealDto save(Deal deal);
 
-    void saveDealList(List<Deal> dealList);
+    List<Deal> saveDealList(List<Deal> dealList);
 }

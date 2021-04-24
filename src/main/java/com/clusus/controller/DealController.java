@@ -3,11 +3,12 @@ package com.clusus.controller;
 import com.clusus.dto.DealDto;
 import com.clusus.entity.Deal;
 import com.clusus.mapper.DealMapper;
+import com.clusus.repository.DealRepository;
 import com.clusus.service.DealService;
 import com.clusus.util.CSVHelper;
 import com.clusus.util.CsvReader;
-import com.clusus.util.FieldValidator;
 import com.clusus.util.DealValidator;
+import com.clusus.util.FieldValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/deal")
+@RequestMapping("/api/v1/deal")
 public class DealController {
     @Autowired
     private DealService dealService;
@@ -33,13 +34,8 @@ public class DealController {
     private CsvReader csvReader;
     @Autowired
     private DealValidator dealValidator;
-
-  /*  public DealController(DealService dealService, FieldValidator fieldValidator, CsvReader csvReader, ValidationUtility validationUtility) {
-        this.dealService = dealService;
-        this.fieldValidator = fieldValidator;
-        this.csvReader = csvReader;
-        this.validationUtility = validationUtility;
-    }*/
+    @Autowired
+    private DealRepository dealRepository;
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody Deal deal, BindingResult bindingResult) {
@@ -48,29 +44,27 @@ public class DealController {
         DealDto dealDto = dealService.save(deal);
         return new ResponseEntity<>(dealDto, HttpStatus.OK);
     }
+    @GetMapping
+    public ResponseEntity<?> get() {
+        List<Deal> list = dealRepository.findAll();
 
-    @GetMapping("/csv")
-    public ResponseEntity<?> upload() {
-//        Map<Integer, Object> errorRecords = csvReader.processCsvFile(new ArrayList<>());
-        return new ResponseEntity<>(new Object(), HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        String message = "";
         if (CSVHelper.hasCSVFormat(file)) {
             List<DealDto> csvRecords = csvReader.processCsvFile(file.getInputStream());
-            Map<Integer, Object> errorMap = dealValidator.validateDeals(csvRecords);
+            Map<Integer, Object> invalidCSVRowMap = dealValidator.validateDeals(csvRecords);
             List<Deal> cleanRecords = new ArrayList<>();
             for (int i = 0; i < csvRecords.size(); i++) {
-                if (!errorMap.containsKey(i)) {
+                if (!invalidCSVRowMap.containsKey(i)) {
                     cleanRecords.add(DealMapper.INSTANCE.toEntity(csvRecords.get(i)));
                 }
             }
             dealService.saveDealList(cleanRecords);
-            return new ResponseEntity<>(errorMap, HttpStatus.OK);
+            return new ResponseEntity<>(invalidCSVRowMap, HttpStatus.OK);
         }
-        message = "Please upload a csv file!";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please upload a csv file!");
     }
 }
