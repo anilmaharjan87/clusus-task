@@ -35,7 +35,8 @@ $ mvn clean install<br/>
 $ run docker-compose up<br/>
 $ use postman to upload csv file to endpoint http://localhost:8080/api/v1/deal/upload
 
-##Output
+### Output
+
 1. Clean data i.e without any violation is stored in mysql database.
 2. Returns list of invalid data with row number, error message and property that is invalid
 
