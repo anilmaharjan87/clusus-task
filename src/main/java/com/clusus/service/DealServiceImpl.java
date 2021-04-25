@@ -7,7 +7,6 @@ import com.clusus.mapper.DealMapper;
 import com.clusus.repository.DealRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,8 +15,11 @@ import java.util.List;
 @Service
 public class DealServiceImpl implements DealService {
     private static final Logger logger = LoggerFactory.getLogger(DealServiceImpl.class);
-    @Autowired
-    private DealRepository dealRepository;
+    private final DealRepository dealRepository;
+
+    public DealServiceImpl(DealRepository dealRepository) {
+        this.dealRepository = dealRepository;
+    }
 
     @Override
     public DealDto save(Deal deal) {

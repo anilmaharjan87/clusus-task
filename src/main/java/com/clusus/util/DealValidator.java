@@ -6,7 +6,6 @@ import com.clusus.enums.CurrencyCode;
 import com.clusus.repository.DealRepository;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -17,8 +16,11 @@ import java.util.Map;
 
 @Component
 public class DealValidator {
-    @Autowired
-    private DealRepository dealRepository;
+    private final DealRepository dealRepository;
+
+    public DealValidator(DealRepository dealRepository) {
+        this.dealRepository = dealRepository;
+    }
 
     public Map<Integer, Object> validateDeals(List<DealDto> dealDtos) {
         Map<Integer, Object> errorMap = new HashMap();
@@ -26,36 +28,38 @@ public class DealValidator {
             List<ErrorResponse> errorResponses = new ArrayList<>();
             DealDto dealDto = dealDtos.get(row);
             if (StringUtils.isBlank(dealDto.getDealId())) {
-                ErrorResponse errorResponse = populateError("Deal with invalid deal id", row, "dealId");
+                ErrorResponse errorResponse = populateError("Deal with invalid deal id", row+1, "dealId");
                 errorResponses.add(errorResponse);
             } else {
                 if (dealRepository.findByDealId(dealDto.getDealId()) != null) {
-                    ErrorResponse errorResponse = populateError("Deal with given deal id  already exists", row, "dealId");
+                    ErrorResponse errorResponse = populateError("Deal with given deal id  already exists", row+1, "dealId");
                     errorResponses.add(errorResponse);
                 }
             }
             if (!EnumUtils.isValidEnum(CurrencyCode.class, dealDto.getFromCurrencyCode())) {
-                ErrorResponse errorResponse = populateError("Deal with invalid from ISO currency code", row, "fromCurrencyCode");
+                ErrorResponse errorResponse = populateError("Deal with invalid from ISO currency code", row+1, "fromCurrencyCode");
                 errorResponses.add(errorResponse);
             }
             if (!EnumUtils.isValidEnum(CurrencyCode.class, dealDto.getToCurrencyCode())) {
-                ErrorResponse errorResponse = populateError("Deal with invalid to ISO currency code", row, "toCurrencyCode");
+                ErrorResponse errorResponse = populateError("Deal with invalid to ISO currency code", row+1, "toCurrencyCode");
                 errorResponses.add(errorResponse);
             }
             if (StringUtils.isBlank(dealDto.getDealTime()) || !DateValidator.isValid(dealDto.getDealTime())) {
-                ErrorResponse errorResponse = populateError("Deal with invalid date format", row, "dealTime");
+                ErrorResponse errorResponse = populateError("Deal with invalid date format", row+1, "dealTime");
                 errorResponses.add(errorResponse);
             }
             if (StringUtils.isBlank(dealDto.getDealAmount()) || !AmountValidator.checkIfAmountIsNumber(dealDto.getDealAmount())) {
-                ErrorResponse errorResponse = populateError("Deal with invalid amount", row, "dealAmount");
+                ErrorResponse errorResponse = populateError("Deal with invalid amount", row+1, "dealAmount");
                 errorResponses.add(errorResponse);
             } else {
                 if (new BigDecimal(dealDto.getDealAmount()).compareTo(BigDecimal.ZERO) <= 0) {
-                    ErrorResponse errorResponse = populateError("Deal with  amount less than or zero", row, "dealAmount");
+                    ErrorResponse errorResponse = populateError("Deal with  amount less than or zero", row+1, "dealAmount");
                     errorResponses.add(errorResponse);
                 }
             }
-            errorMap.put(row, errorResponses);
+            if (!errorResponses.isEmpty()) {
+                errorMap.put(row, errorResponses);
+            }
         }
         return errorMap;
     }

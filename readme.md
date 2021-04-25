@@ -31,6 +31,7 @@ with corresponding row number.
 ### How to run this?
 
 $ git clone https://github.com/anilmaharjan87/clusus-task.git
-
+$ mvn clean install
+$ run docker-compose up
 
 

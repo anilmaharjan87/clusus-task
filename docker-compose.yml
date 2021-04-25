@@ -17,7 +17,7 @@ services:
     depends_on:
       - mysql-docker-container
     ports:
-      - 8087:8080
+      - 8080:9090
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-docker-container:3306/deal?createDatabaseIfNotExist=true
     volumes:
