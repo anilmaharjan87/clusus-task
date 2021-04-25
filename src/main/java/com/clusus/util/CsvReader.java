@@ -12,6 +12,7 @@ import java.util.List;
 @Component
 public class CsvReader {
     private static final String COMMA_SEPARATOR = ",";
+    private static final Integer LIMIT = -1;
     private static final Logger logger = LoggerFactory.getLogger(CsvReader.class);
 
     public List<DealDto> processCsvFile(InputStream recordStream) {
@@ -26,7 +27,7 @@ public class CsvReader {
                     continue;
                 }
                 DealDto dealDto = new DealDto();
-                String[] data = row.split(COMMA_SEPARATOR);
+                String[] data = row.split(COMMA_SEPARATOR, LIMIT);
                 dealDto.setDealId(data[0]);
                 dealDto.setFromCurrencyCode(data[1]);
                 dealDto.setToCurrencyCode(data[2]);
