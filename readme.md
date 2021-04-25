@@ -32,6 +32,7 @@ with corresponding row number.
 
 $ git clone https://github.com/anilmaharjan87/clusus-task.git<br/>
 $ mvn clean install<br/>
-$ run docker-compose up
+$ run docker-compose up<br/>
+$ use postman to upload csv file to endpoint http://localhost:8080/api/v1/deal/upload
 
 
