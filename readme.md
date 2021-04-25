@@ -1,4 +1,4 @@
-# Clustered data warehouse #
+# Clustered data warehouse:
 
 Clustered data warehouse application reads csv file that the user have to upload through the exposed endpoint. The
 endpoint to upload csv file is [upload csv](http://localhost:8080/api/v1/deal/upload). After upload is successful it
@@ -23,7 +23,7 @@ with corresponding row number.
 5. JUnit
 6. Docker
 
-## Deliverables
+### Deliverables
 
 1. Working spring boot project
 2. Docker file
