@@ -1,4 +1,4 @@
-# Clustered data warehouse
+# Clustered data warehouse #
 
 Clustered data warehouse application reads csv file that the user have to upload through the exposed endpoint. The
 endpoint to upload csv file is [upload csv](http://localhost:8080/api/v1/deal/upload). After upload is successful it
@@ -30,8 +30,8 @@ with corresponding row number.
 
 ### How to run this?
 
-$ git clone https://github.com/anilmaharjan87/clusus-task.git
-$ mvn clean install
+$ git clone https://github.com/anilmaharjan87/clusus-task.git<br/>
+$ mvn clean install<br/>
 $ run docker-compose up
 
 
